@@ -8,7 +8,9 @@ bark_msg_url = 'https://api.day.app/' + config.bark_id + '/'
 # 检查主页公告 无需cookie
 def check_home():
     url = 'https://maicai.api.ddxq.mobi/homeApi/newDetails'
-    payload = {'station_id': config.station_id}
+    payload = {'api_version': '9.49.1',
+               'station_id': config.station_id,
+               }
     r = requests.get(url, params=payload)
     if r.status_code == 200:
         r.encoding = 'utf-8'
@@ -16,12 +18,12 @@ def check_home():
         if res['code'] == 0:
             find = r.text.find(config.key_word)
             params = {'group': '叮咚买菜'}
-            print(res)
+            print(r.text)
             if find > 0:
+                print('还没有运力！', time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+            else:
                 txt = '叮咚买菜有运力啦!!!'
                 requests.get(bark_msg_url + txt, params=params)
-            else:
-                print('还没有运力！', time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
 
 
 # 检查购物车 需要cookie
