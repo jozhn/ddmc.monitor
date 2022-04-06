@@ -55,13 +55,16 @@ def check_cart():
         if res['code'] == 0:
             reserve_times = res['data'][0]['time'][0]['times']
             params = {'group': '叮咚买菜'}
+            all_full = True
             for reserve_time in reserve_times:
-                if not reserve_time['fullFlag']:
-                    txt = '叮咚买菜可以预约啦!!!最早可预约时间：' + reserve_time['select_msg']
-                    requests.get(bark_msg_url + txt, params=params)
-                    break
+                all_full = all_full and reserve_time['fullFlag']
+            if not all_full:
+                txt = '叮咚买菜可以预约啦!!!最早可预约时间：' + reserve_time['select_msg']
+                requests.get(bark_msg_url + txt, params=params)
+            else:
+                print('还没有可预约时间!')
         else:
-            print('还没有可预约时间!')
+            print('请求异常!')
 
 
 def run():
