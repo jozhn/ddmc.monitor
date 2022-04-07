@@ -17,7 +17,7 @@
     - 可能相比购物车有延迟
 2. **购物车预约时间监控**(需要登录，有封号风险，谨慎使用)
     - 需要填写UA等信息作为header
-    - 然后`raw_body`填Fiddler里面请求信息的Raw tab最下面的一串url格式的字符串(类似`uid=xxx&longitude=xxx`)
+    - 然后`raw_body`填Fiddler里面请求信息的Raw tab最下面的一串url格式的字符串(类似`uid=xxx&longitude=xxx`，购物车点结算-预约时间就有了)
 
 执行main.py即可
 
