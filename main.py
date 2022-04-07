@@ -8,10 +8,12 @@ bark_msg_url = 'https://api.day.app/' + config.bark_id + '/'
 # 检查主页公告 无需cookie
 def check_home():
     url = 'https://maicai.api.ddxq.mobi/homeApi/newDetails'
+    headers = {'User-Agent': config.ua,
+               }
     payload = {'api_version': '9.49.1',
                'station_id': config.station_id,
                }
-    r = requests.get(url, params=payload)
+    r = requests.get(url, params=payload, headers=headers)
     if r.status_code == 200:
         r.encoding = 'utf-8'
         res = r.json()
