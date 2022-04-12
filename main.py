@@ -2,7 +2,7 @@ import requests
 import time
 import sys
 import config
-from get_categories import check_stock, send_msg_bark
+from check_stock import check_stock, send_msg_bark
 
 
 # 检查主页公告 无需cookie
