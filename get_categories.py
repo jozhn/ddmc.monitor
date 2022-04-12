@@ -3,7 +3,6 @@ import os
 
 import requests
 import config
-import extract_categories
 
 
 def send_msg_bark(msg):
@@ -88,7 +87,6 @@ def get_menu_with_category_id(category_id):
         r.encoding = 'utf-8'
         res = r.json()
         menu = {'sub_category_name': res['data']['category_name'], 'products': []}
-        # menu['count'] = 0
         if 'cate' in res['data']:
             foods = []
             for sub_category in res['data']['cate']:
@@ -97,7 +95,6 @@ def get_menu_with_category_id(category_id):
                     for product in sub_category['products']:
                         foods.append(product['name'])
                 menu['products'] = foods
-                # menu['count'] = len(foods)
         return menu
 
 
