@@ -1,8 +1,8 @@
 import requests
 import time
+import sys
 import config
-
-bark_msg_url = 'https://api.day.app/' + config.bark_id + '/'
+from check_stock import check_stock, send_msg_bark
 
 
 # 检查主页公告 无需cookie
@@ -25,7 +25,7 @@ def check_home():
                 print('还没有运力！', time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
             else:
                 txt = '叮咚买菜有运力啦!!!'
-                requests.get(bark_msg_url + txt, params=params)
+                send_msg_bark(txt)
 
 
 # 检查购物车 需要cookie
@@ -65,7 +65,7 @@ def check_cart():
                 all_full = all_full and reserve_time['fullFlag']
             if not all_full:
                 txt = '叮咚买菜可以预约啦!!!最早可预约时间：' + reserve_time['select_msg']
-                requests.get(bark_msg_url + txt, params=params)
+                send_msg_bark(txt)
             else:
                 print('还没有可预约时间!')
         else:
@@ -76,10 +76,17 @@ def run():
     while True:
         if config.run_type == 1:
             check_home()
-        else:
+        elif config.run_type == 2:
             check_cart()
+        else:
+            check_stock()
         time.sleep(config.duration)
 
 
 if __name__ == '__main__':
+    # 给在服务器后台执行使用
+    if len(sys.argv) > 1:
+        run_type = int(sys.argv[1])
+        if run_type in [1, 2, 3]:
+            config.run_type = run_type
     run()
