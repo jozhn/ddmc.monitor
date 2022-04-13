@@ -1,5 +1,6 @@
 import json
 import os
+import time
 
 import requests
 import config
@@ -55,7 +56,7 @@ def extract_categories():
 
 
 # 通过经纬度获取站点名称
-def get_station_name(longitude,latitude):
+def get_station_name(longitude, latitude):
     url = "https://sunquan.api.ddxq.mobi/api/v2/user/location/refresh/"
     headers = {
         'User-Agent': config.ua,
@@ -106,29 +107,37 @@ def check_stock():
     with open("all_categories_formatted.json") as f:
         flag = False
         all_categories = json.load(f)
-        print("|------"+get_station_name(config.longitude,config.latitude))
+
         for top_category in all_categories["top_categories"]:
             all_submenu = []
             if top_category['name'] in config.name_of_categories_i_care:
 
                 for sub_category in top_category["sub_categories"]:
                     menu = get_menu_with_category_id(sub_category['sub_category_id'])
-                    if len(menu['products'])>0:
+                    if len(menu['products']) > 0:
                         all_submenu.append(menu)
                 count = 0
                 for menu in all_submenu:
                     count += len(menu['products'])
                 if count > 0:
                     flag = True
+                    print("|------" + get_station_name(config.longitude, config.latitude))
                     print("|-" + top_category['name'])
                     msg += top_category['name'] + ", "
                     print("| |")
                     for menu in all_submenu:
                         if len(menu['products']) > 0:
-                            print("| |-" + sub_category['name']+": "+str(len(menu['products'])))
+                            print("| |-" + sub_category['name'] + ": " + str(len(menu['products'])))
                             for product in menu['products']:
-                                print("| |  |-"+product)
+                                print("| |  |-" + product)
     if flag:
-        msg = "有菜啦！"+msg
+        msg = "有菜啦！" + msg
         print(msg)
         send_msg_bark(msg)
+    else:
+        print(
+            "|------"
+            + get_station_name(config.longitude, config.latitude) + " "
+            + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            + "没有菜哦！"
+        )
