@@ -104,7 +104,7 @@ def check_stock():
         extract_categories()
     flag = False
     msg = ""
-    with open("all_categories_formatted.json") as f:
+    with open("all_categories_formatted.json", encoding='utf-8') as f:
         flag = False
         all_categories = json.load(f)
 

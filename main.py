@@ -19,13 +19,14 @@ def check_home():
         res = r.json()
         if res['code'] == 0:
             find = r.text.find(config.key_word)
-            params = {'group': '叮咚买菜'}
             print(r.text)
             if find > 0:
                 print('还没有运力！', time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
             else:
                 txt = '叮咚买菜有运力啦!!!'
                 send_msg_bark(txt)
+    else:
+        print('请求异常', r.text)
 
 
 # 检查购物车 需要cookie
@@ -59,7 +60,6 @@ def check_cart():
         print(res)
         if res['code'] == 0:
             reserve_times = res['data'][0]['time'][0]['times']
-            params = {'group': '叮咚买菜'}
             all_full = True
             for reserve_time in reserve_times:
                 all_full = all_full and reserve_time['fullFlag']
@@ -70,6 +70,8 @@ def check_cart():
                 print('还没有可预约时间!')
         else:
             print('请求异常!')
+    else:
+        print('请求异常', r.text)
 
 
 def run():
